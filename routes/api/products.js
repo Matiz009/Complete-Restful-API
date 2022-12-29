@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { Product } = require("../../models/product");
 const validateProduct = require("../../middlewares/validateProduct");
+const auth = require("../../middlewares/auth");
 //getting multiple records
-router.get("/", async(req, res) => {
+router.get("/", auth, async(req, res) => {
+    console.log(req.user);
     let page = Number(req.query.page ? req.query.page : 1);
     let perPage = Number(req.query.perPage ? req.query.perPage : 10);
     let skipRecords = perPage * (page - 1);
