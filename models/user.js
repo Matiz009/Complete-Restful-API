@@ -1,12 +1,17 @@
 var mongoose = require("mongoose");
 ("use strict");
 const Joi = require("@hapi/joi");
+var bcrypt = require("bcryptjs");
 
 var userSchema = mongoose.Schema({
     name: String,
     email: String,
     password: String,
 });
+userSchema.methods.generateHashedPassword = async function() {
+    let salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+};
 
 function validateUser(data) {
     const Schema = Joi.object({
