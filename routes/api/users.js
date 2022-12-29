@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 var bcrypt = require("bcryptjs");
 var _ = require("lodash");
+var jwt = require("jsonwebtoken");
+var config = require("config");
 const { User } = require("../../models/user");
 router.post("/register", async(req, res) => {
     let user = await User.findOne({ email: req.body.email });
@@ -27,6 +29,9 @@ router.post("/login", async(req, res) => {
     if (!isValid) {
         return res.status(401).send("invalid Password");
     }
-    res.send("Login Successfully!");
+    let token = jwt.sign({ _id: user._id, name: user.name },
+        config.get("jwtPrivateKey")
+    );
+    res.send(token);
 });
 module.exports = router;
