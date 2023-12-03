@@ -5,7 +5,6 @@ const validateProduct = require("../../middlewares/validateProduct");
 const auth = require("../../middlewares/auth");
 //getting multiple records
 router.get("/", auth, async(req, res) => {
-    console.log(req.user);
     let page = Number(req.query.page ? req.query.page : 1);
     let perPage = Number(req.query.perPage ? req.query.perPage : 10);
     let skipRecords = perPage * (page - 1);
@@ -40,7 +39,6 @@ router.delete("/:id", async(req, res) => {
     let product = await Product.findByIdAndDelete(req.params.id);
     return res.send(product);
 });
-
 //insert
 router.post("/", validateProduct, async(req, res) => {
     try {
